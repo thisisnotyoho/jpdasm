@@ -42,3 +42,6 @@ incsrc "bank_1C.asm"
 incsrc "bank_1D.asm"
 incsrc "bank_1E.asm"
 incsrc "bank_1F.asm"
+
+; include fastrom patches last
+incsrc "fastrom.asm"

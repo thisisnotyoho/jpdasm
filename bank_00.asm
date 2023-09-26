@@ -1,4 +1,5 @@
-org $008000
+;org $008000
+org $808000 ; Fastrom
 
 ;===================================================================================================
 ; This is probably how the game starts!
@@ -15,9 +16,13 @@ Interrupt_Reset:
 #_008010: STZ.w APUIO2
 #_008013: STZ.w APUIO3
 
-#_008016: LDA.b #$80 ; Enable force blank
-#_008018: STA.w INIDISP
+;#_008016: LDA.b #$80 ; Enable force blank
+;#_008018: STA.w INIDISP
 
+#_008016: JML FastRom_Init ; Fastrom Changes
+#_00801A: db $FF ; Pad to original
+
+FastRom_Return:
 #_00801B: CLC
 #_00801C: XCE
 
@@ -1804,12 +1809,21 @@ SaveGameFile:
 
 #_0089C1: RTL
 
+FastRom_Init:
+#_0089C2: LDA.b #$01
+#_0089C4: STA.w MEMSEL ; Enable FastRom in CPU
+#_0089C7: LDA.b #$80  ; Code we inserted over
+#_0089C9: STA.w INIDISP
+#_0089CC: PHA ; Set DBR to fastrom area
+#_0089CD: PLB ;
+#_0089CE: JML FastRom_Return ; this should fully be in fastrom now
+
 ;===================================================================================================
 ; FREE ROM: 0x1E
 ;===================================================================================================
 NULL_0089C2:
-#_0089C2: db $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
-#_0089CA: db $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+;#_0089C2: db $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+;#_0089CA: db $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
 #_0089D2: db $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
 #_0089DA: db $FF, $FF, $FF, $FF, $FF, $FF
 
@@ -17179,7 +17193,8 @@ NULL_00FFB7:
 InternalROMHeader:
 #_00FFC0: db "ZELDANODENSETSU      "
 
-#_00FFD5: db $20 ; ROM mapping: lorom
+;#_00FFD5: db $20 ; ROM mapping: lorom
+#_00FFD5: db $30 ; ROM mapping: fastrom
 #_00FFD6: db $02 ; Cartridge: ROM+RAM+battery
 #_00FFD7: db $0A ; ROM size: 1MB
 #_00FFD8: db $03 ; RAM size: 8kB
