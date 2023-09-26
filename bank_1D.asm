@@ -3297,8 +3297,9 @@ Ganon_Phase3_SabotagePB:
 #_1D91DE: LDA.w $0DF0,X
 #_1D91E1: BNE .delay
 
+; Changed to AND.b #$00, should make phase 3 not warp
 #_1D91E3: JSL GetRandomNumber
-#_1D91E7: AND.b #$01
+#_1D91E7: AND.b #$00
 #_1D91E9: BEQ .allow_for_pb
 
 #_1D91EB: JMP.w Ganon_Phase3_WarpSelect
@@ -21540,16 +21541,17 @@ DigGame_SpawnPrize:
 #_1DFD63: SEP #$30
 #_1DFD65: BCS DigGamePrize_Nothing
 
+; I'm changing the AND here to $00 and moving the grand prize from slot 4 to slot 0
 #_1DFD67: JSL GetRandomNumber
-#_1DFD6B: AND.b #$07
+#_1DFD6B: AND.b #$00
 #_1DFD6D: TAY
 
 #_1DFD6E: JSL JumpTableLocal
-#_1DFD72: dw DigGamePrize_CompensationPrize
+#_1DFD72: dw DigGamePrize_GrandPrize
 #_1DFD74: dw DigGamePrize_CompensationPrize
 #_1DFD76: dw DigGamePrize_CompensationPrize
 #_1DFD78: dw DigGamePrize_CompensationPrize
-#_1DFD7A: dw DigGamePrize_GrandPrize
+#_1DFD7A: dw DigGamePrize_CompensationPrize
 #_1DFD7C: dw DigGamePrize_Nothing
 #_1DFD7E: dw DigGamePrize_Nothing
 #_1DFD80: dw DigGamePrize_Nothing
@@ -21583,7 +21585,7 @@ DigGamePrize_CompensationPrize:
 ; 25 digs
 #_1DFD90: LDA.l $7FFE01
 #_1DFD94: CMP.b #25
-#_1DFD96: BCC DigGamePrize_Nothing
+#_1DFD96: BCC DigGamePrize_CompensationPrize
 
 ; make sure it hasn't already been obtained
 #_1DFD98: LDA.l $7FFE00
@@ -21592,7 +21594,9 @@ DigGamePrize_CompensationPrize:
 ; and you still only have a 1/4 shot at it
 #_1DFD9E: JSL GetRandomNumber
 #_1DFDA2: AND.b #$03
-#_1DFDA4: BNE DigGamePrize_Nothing
+;#_1DFDA4: BNE DigGamePrize_Nothing
+#_1DFDA4: NOP
+#_1DFDA5: NOP
 
 #_1DFDA6: LDA.b #$EB
 #_1DFDA8: STA.l $7FFE00
