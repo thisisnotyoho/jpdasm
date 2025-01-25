@@ -21565,8 +21565,8 @@ DigGamePrize_Offset_X:
 #_1DFD84: db $00, $13
 
 CompensationPrizeTable:
-#_1DFD86: db $DB ; SPRITE DB - red rupee
-#_1DFD87: db $DA ; SPRITE DA - blue rupee
+#_1DFD86: db $DA ; SPRITE DA - blue rupee
+#_1DFD87: db $DB ; SPRITE DB - red rupee
 #_1DFD88: db $D9 ; SPRITE D9 - green rupee
 #_1DFD89: db $DF ; SPRITE DF - small magc
 
